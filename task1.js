@@ -218,3 +218,4 @@ try-catch is used to handle errors and prevent the program from stopping
 Type conversion means we manually change the type of a value.
 Type coercion means JavaScript automatically changes the type.
 */
+console.log("hossamn")
