@@ -171,6 +171,6 @@ const gzip=zlib.createGzip();
 readableSteam.pipe(gzip).pipe(writeStreamm)
 
 writeStreamm.on("finish",()=>{
-  console.log("File has been compressed and copied")
+  console.log("File has been compressed and copied ")
 })
 
