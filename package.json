@@ -1,0 +1,23 @@
+{
+  "name": "tasks",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Perffectoo/Tasks-for-backend#readme",
+  "bugs": {
+    "url": "https://github.com/Perffectoo/Tasks-for-backend/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Perffectoo/Tasks-for-backend.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "task1.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
