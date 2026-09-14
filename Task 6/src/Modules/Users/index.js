@@ -1,0 +1,1 @@
+export {default as UsersRouter} from "./Users.controller.js";
