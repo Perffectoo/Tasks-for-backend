@@ -1,0 +1,1 @@
+export {default as messageRouter} from './messages.controller.js';
