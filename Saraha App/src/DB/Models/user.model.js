@@ -7,7 +7,7 @@ import {
 } from "../../Utils/enums/user.enum.js";
 
 
-const userSchema = new Schema(
+const UserModel = new Schema(
     {
         firstName: {
             type: String,
@@ -33,7 +33,9 @@ const userSchema = new Schema(
 
         password: {
             type: String,
-            required: [true, "Password is required"]
+            required: function () {
+                return this.Provider === ProviderEnum.SYSTEM;
+            }
         },
 
         DOB: Date,
@@ -80,7 +82,7 @@ const userSchema = new Schema(
 
 
 // Virtual username
-userSchema
+UserModel
     .virtual("username")
 
     .set(function (value) {
@@ -102,7 +104,7 @@ userSchema
 
 const User = mongoose.model(
     "User",
-    userSchema
+    UserModel
 );
 
 
