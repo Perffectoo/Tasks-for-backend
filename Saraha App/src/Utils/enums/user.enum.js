@@ -25,3 +25,12 @@ export const  TokenTypeEnum = {
     ACCESS: 0,
     REFRESH: 1
 };
+
+
+
+
+
+export const  LogOutTypeEnum = {
+    LogOutFromAll: "LOGOUT_FROM_ALL",
+    Logout: "Logout",
+};

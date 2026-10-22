@@ -7,3 +7,15 @@ export const getProfile = async (req, res) => {
     data: { user: req.user },
   });
 };
+
+
+
+export const uploadProfilePic = async (req, res) => {
+
+
+  successResponse({
+    res,
+    message: "Por",
+    data: { user: req.user },
+  });
+};

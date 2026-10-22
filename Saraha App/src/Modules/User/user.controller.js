@@ -10,4 +10,15 @@ router.get(
   userService.getProfile,
 );
 
+
+
+router.patch(
+  "/update-profile-pic",
+  // authentication({ tokenType: TokenTypeEnum.ACCESS }),
+  // authorization({ accessRoles: [roleEnum.ADMIN] }),
+  localFileUpload().single("attachments"),
+  userService.uploadProfilePic,
+);
+
+
 export default router;

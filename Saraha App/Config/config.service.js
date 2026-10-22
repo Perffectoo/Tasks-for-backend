@@ -22,3 +22,5 @@ export const JWT_ADMIN_SECRET_REFRESH = process.env.JWT_ADMIN_SECRET_REFRESH;
 export const JWT_EXPIRES_IN_ACCESS = process.env.JWT_EXPIRES_IN_ACCESS;
 export const JWT_EXPIRES_IN_REFRESH = process.env.JWT_EXPIRES_IN_REFRESH;
 export const CLIENT_ID = process.env.CLIENT_ID;
+export const USER_EMAIL = process.env.USER_EMAIL;
+export const USER_PASSWORD = process.env.USER_PASSWORD;

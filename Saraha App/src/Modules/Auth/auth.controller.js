@@ -9,11 +9,22 @@ const router = Router();
 
 router.post("/signup", authservice.signup);
 router.post("/login", authservice.login);
+router.patch("/confirm-email", authservice.confirmEmail);
+router.patch("/forget-password", authservice.forgetPassword);
+router.patch("/reset-password", authservice.resetPassword);
+
 router.post(
   "/refresh-token",
   authentication({ tokenType: TokenTypeEnum.REFRESH }),
   authorization({ accessRoles: [roleEnum.ADMIN, roleEnum.USER] }),
   authservice.refreshToken,
+);
+
+router.post(
+  "/logout",
+  authentication({ tokenType: TokenTypeEnum.ACCESS }),
+  authorization({ accessRoles: [roleEnum.ADMIN, roleEnum.USER] }),
+  authservice.logout,
 );
 
 router.post("/social-login", authservice.loginWithGmail);
