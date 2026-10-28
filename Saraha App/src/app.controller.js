@@ -7,6 +7,7 @@ import {
 import connectDB from "./DB/connections.js";
 import cors from "cors";
 import { sendEmail } from "./Utils/email/nodemailer.emai.js";
+import path from "node:path";
 const bootstrap = async (app, express) => {
   app.use(express.json(), cors());
 
@@ -21,7 +22,7 @@ const bootstrap = async (app, express) => {
     });
   });
 
-
+  app.use("/upload", express.static(path.resolve("./src/uploads")));
   app.use("/api/v1/auth", authRouter);
   app.use("/api/v1/users", userRouter);
   app.use("/api/v1/roles", messageRouter);

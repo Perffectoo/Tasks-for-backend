@@ -67,7 +67,7 @@ const UserModel = new Schema(
 
     ProfilePicture: String,
 
-    coverPicture: String,
+    coverPicture: [String],
     changeCredentialTime: Date,
   },
 
