@@ -6,6 +6,9 @@ import {
 } from "../../MiddleWares/auth.middleware.js";
 import { roleEnum, TokenTypeEnum } from "../../Utils/enums/user.enum.js";
 import { fileValidation, localFileUpload, validationMagicNumbers } from "../../Utils/enums/multer/local.multer.js";
+import { validation } from "../../MiddleWares/validation.middleware.js";
+import {freezeAccountSchema, hardDeleteAccountSchema, restoreAccountSchema} from "./user.validation.js";
+
 const router = Router();
 router.get(
   "/profile",
@@ -35,6 +38,31 @@ router.patch(
   }).array("attachments", 10),
   // validationMagicNumbers([fileValidation.documents]),
   userService.uploadCoverPic,
+);
+
+router.patch(
+  "/:userId/freeze-account",
+  authentication({ tokenType: TokenTypeEnum.ACCESS }),
+  authorization({ accessRoles: [roleEnum.ADMIN, roleEnum.USER] }),
+  validation(freezeAccountSchema),
+  userService.freezeAccount,
+);
+
+router.patch(
+  "/:userId/restore-account",
+  authentication({ tokenType: TokenTypeEnum.ACCESS }),
+  authorization({ accessRoles: [roleEnum.ADMIN, roleEnum.USER] }),
+  validation(restoreAccountSchema),
+  userService.restoreAccount,
+);
+
+
+router.delete(
+  "/:userId/hard-delete-account",
+  authentication({ tokenType: TokenTypeEnum.ACCESS }),
+  authorization({ accessRoles: [roleEnum.ADMIN] }),
+  validation(hardDeleteAccountSchema),
+  userService.HardDeleteAccount,
 );
 
 export default router;

@@ -17,6 +17,7 @@ import UserModel from "../../DB/Models/user.model.js";
 import * as dbService from "../../DB/database.repository.js";
 import { v4 as uuid } from "uuid";
 import TokenModel from "../../DB/Models/token.model.js";
+import { get, revokeTokenKey } from "../../DB/redis.service.js";
 
 export const generateToken = ({ payload, secretKey, options }) => {
   return jwt.sign(payload, secretKey, options);
@@ -91,15 +92,20 @@ export const decodedToken = async ({
         : signature.refreshSignature,
   });
 
-  const isRevoked = await dbService.findOne(TokenModel, { jti: decoded.jti });
+  // const isRevoked = await dbService.findOne(TokenModel, { jti: decoded.jti });
+  const isRevoked = await get({
+    key: revokeTokenKey({ userId: decoded.id, jti: decoded.jti }),
+  });
   if (isRevoked)
-     BadRequestException({
+    BadRequestException({
       message: "token is revoked ,please login again ",
     });
 
   const user = await dbService.findById(UserModel, decoded.id);
+
+
   if (!user) throw NotfoundException({ message: "user not found" });
-  if(user.changeCredentialTime?.getTime() || 0 > decoded.iat * 1000)
+  if (user.changeCredentialTime?.getTime() || 0 > decoded.iat * 1000)
     BadRequestException({
       message: "login again  ",
     });

@@ -21,9 +21,12 @@ import { emailEvent } from "../../Utils/events/email.events.js";
 import { generateOTP } from "../../Utils/security/otp.security.js";
 import TokenModel from "../../DB/Models/token.model.js";
 import { LogOutTypeEnum } from "../../Utils/enums/user.enum.js";
+import {set, revokeTokenKey } from "../../DB/redis.service.js";
+import { signupSchema } from "./auth.validation.js";
 
 export const signup = async (req, res) => {
-  const { email, password, username, phone, gender, role, DOB } = req.body;
+  const { email, password, username, phone, gender, role, DOB,age } = req.body;
+
 
   // Check if email already exists
   const user = await dbService.findOne(UserModel, { email });
@@ -311,6 +314,41 @@ export const logout = async (req, res) => {
       ]);
       break;
     }
+
+    case LogOutTypeEnum.LogOutFromAll: {
+      await dbService.updateOne(
+        UserModel,
+        { _id: req.user._id },
+        {
+          $set: {
+            changeCredentialTime: new Date(),
+          },
+        },
+      );
+      break;
+    }
+
+    default:
+      throw BadRequestException("Invalid logout flag");
+  }
+
+  return successResponse({
+    res,
+    statusCode: 200,
+    message: "Logged out successfully",
+  });
+};
+
+export const logoutWithRedis = async (req, res) => {
+  const { flag } = req.query;
+  switch (flag) {
+    case LogOutTypeEnum.Logout:
+      await set({
+        key: revokeTokenKey({ userId: req.user._id, jti: req.decoded.jti }),
+        value: req.decoded.jti,
+        ttl: req.decoded.exp,
+      });
+      break;
 
     case LogOutTypeEnum.LogOutFromAll: {
       await dbService.updateOne(

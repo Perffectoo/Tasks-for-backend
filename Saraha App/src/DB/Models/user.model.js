@@ -69,6 +69,20 @@ const UserModel = new Schema(
 
     coverPicture: [String],
     changeCredentialTime: Date,
+    freezeAt: Date,
+    freezedBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
+    freezedByRole: {
+      type: Number,
+      enum: Object.values(roleEnum),
+    },
+    restoredAt: Date,
+    restoredBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
 
   {

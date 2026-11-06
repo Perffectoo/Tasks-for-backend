@@ -8,10 +8,14 @@ import connectDB from "./DB/connections.js";
 import cors from "cors";
 import { sendEmail } from "./Utils/email/nodemailer.emai.js";
 import path from "node:path";
+import { redisconnection } from "./DB/redis.connection.js";
+import { corsOptions } from "./Utils/cors/cors.js";
+import helmet from "helmet";
 const bootstrap = async (app, express) => {
-  app.use(express.json(), cors());
+  app.use(express.json(), cors(corsOptions()),helmet());
 
   await connectDB();
+  await redisconnection();
 
   app.get("/", (req, res) => {
     successResponse({
@@ -25,7 +29,7 @@ const bootstrap = async (app, express) => {
   app.use("/upload", express.static(path.resolve("./src/uploads")));
   app.use("/api/v1/auth", authRouter);
   app.use("/api/v1/users", userRouter);
-  app.use("/api/v1/roles", messageRouter);
+  app.use("/api/v1/messages", messageRouter);
 
   app.all("/*dummy", (req, res) => {
     throw BadRequestException({ message: "Not found Handler!!" });
