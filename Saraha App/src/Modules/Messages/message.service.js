@@ -24,9 +24,9 @@ export const sendMessage = async (req, res) => {
     throw new Error("Content and receiverId are required");
   }
 
-  const receiver = await findById(UserModel, receiverId);
+  const receiver = await findOne(UserModel, {_id: receiverId,freezeAt:{$exists:false}});
   if (!receiver) {
-    throw NotfoundException("Receiver not found");
+    throw NotfoundException("Receiver not found or account is frozen");
   }
   const message = await create(MessageModel, [
     {
@@ -239,6 +239,29 @@ export const getConversationMessages = async (req, res) => {
     data: {
       conversationId: conversation._id,
       messages: conversation.messages,
+    },
+  });
+};
+
+
+export const deleteMessage = async (req, res) => {
+  const { messageId } = req.params;
+  const userId = req.user._id;
+
+  const result = await deleteOne(MessageModel, {
+    _id: messageId,
+    $or: [{ senderId: userId }, { receiverId: userId }],
+  });
+
+  if (!result) {
+    throw NotfoundException("Message not found");
+  }
+
+  return successResponse({
+    res,
+    message: "Message deleted successfully",
+    data: {
+      messageId: result._id,
     },
   });
 };

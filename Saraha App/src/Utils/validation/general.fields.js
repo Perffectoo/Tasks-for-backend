@@ -44,7 +44,11 @@ export const generalFields = {
   otp: z.string().regex(/^[0-9]{6}$/, { error: "OTP must be 6 digits" }),
 
   authorization: z.string({ error: "authorization header is requried" }),
-  content: z.string({ error: "content is required" }).trim().min(1),
+  content: z
+    .string({ error: "content is required" })
+    .trim()
+    .min(1)
+    .max(500, { error: "content must be at most 500 characters" }),
 
   file: (allowedMimeTypes, maxSizeBytes = 5 * 1024 * 1024) => {
     z.object({

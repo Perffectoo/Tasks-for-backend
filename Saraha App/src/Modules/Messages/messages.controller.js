@@ -9,7 +9,7 @@ import { roleEnum, TokenTypeEnum } from "../../Utils/enums/user.enum.js";
 const router = Router();
 
 router.post(
-  "/send-message",
+  "/send-message/:receiverId  ",
   authentication({ tokenType: TokenTypeEnum.ACCESS }),
   authorization({ accessRoles: [roleEnum.ADMIN, roleEnum.USER] }),
   validation(sendMessageSchema),
@@ -55,6 +55,13 @@ router.get(
   authorization({ accessRoles: [roleEnum.ADMIN, roleEnum.USER] }),
   validation(getConversationMessagesSchema),
   messageService.getConversationMessages
+);
+
+router.delete(
+  "/messages/:messageId",
+  authentication({ tokenType: TokenTypeEnum.ACCESS }),
+  authorization({ accessRoles: [roleEnum.ADMIN, roleEnum.USER] }),
+  messageService.deleteMessage
 );
 export default router;
 
